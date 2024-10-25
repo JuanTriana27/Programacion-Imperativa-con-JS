@@ -40,3 +40,15 @@ let palabras = ["Manzana", "Naranja", "Platano", "Fresa", "Kiwi"];
 
 palabras.sort();
 console.log(palabras); // ["Fresa", "Kiwi", "Manzana", "Naranja", "Platano"]
+
+
+/* .find()
+Sintaxis: let resultado = arrayOriginal.find(callback); */
+
+let edades = [15, 20, 25, 30, 35, 40, 45, 50];
+
+let mayorEdad = edades.find(edad => edad >= 18);
+console.log(mayorEdad); // 20
+
+let primeraEdadMayor = edades.find(edad => edad >= 30);
+console.log(primeraEdadMayor); // 30
