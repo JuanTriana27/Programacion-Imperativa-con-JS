@@ -62,7 +62,7 @@ function completarTarea(indice) {
 
     if (indice >= 0 && indice < tareas.length) {
         tareas[indice].completada = true;
-        console.log("Tarea Marcada Correcta")
+        console.log("Tarea Marcada Correctamente")
     } else {
         console.log("Indice de Tarea Invalido");
     }
@@ -71,7 +71,7 @@ function completarTarea(indice) {
 
 
 // Funcion para modificar Tarea
-function modificarTarea(indice, nuevoNombreRecibido, nuevaFechaRecibida = null, nuevoNumeroCategoria) {
+function modificarTarea(indice, nuevoNombreRecibido, nuevaFechaRecibida = null, nuevoNumeroCategoria = null) {
 
     if (indice >= 0 && indice < tareas.length) {
         tareas[indice].nombre = nuevoNombreRecibido !== undefined ? nuevoNombreRecibido : tareas[indice].nombre; // Si el nuevo nombre no es undefined, se asigna el nuevo nombre, de lo contrario se mantiene el nombre actual
@@ -104,7 +104,7 @@ function tareasCompletadasporCategoria(numeroCategoria) {
     let tareasTotales = tareasCategoria.length;
 
     console.log("------TAREAS COMPLETADAS------");
-    console.log("Tareas Completadas: " + numeroCategoria + ": " + tareasCompletadas + " de " + tareasTotales + " tareas.");
+    console.log("Tareas Completadas en " + categoriasNombres[numeroCategoria] + ": " + tareasCompletadas + " de " + tareasTotales + " tareas.");
 }
 
 
@@ -113,12 +113,68 @@ function tareasPendientes() {
     console.log("------TAREAS PENDIENTES------");
     tareas.forEach(function (tarea, indice) {
         if (!tarea.completada) {
-            console.log("- Nombre:" + tarea.nombre + ", categoria: " + categoriasNombres[tarea.categoria]);
+            console.log(indice + "- Nombre: " + tarea.nombre + ", categoria: " + categoriasNombres[tarea.categoria]);
         }
 
     });
 }
 
+// Funcion para ordenar tareas por la propiedad 'nombre' utilizando BubbleSort
+function ordenarTareasPorNombre() {
+    let total = tareas.length;
+
+    for (let j = 0; j < total; j++) {
+        for (let i = 0; i < total - 1; i++) {
+            if (tareas[i].nombre > tareas[i + 1].nombre) {
+
+                let temp = tareas[i];
+                tareas[i] = tareas[i + 1];
+                tareas[i + 1] = temp;
+
+            }
+        }
+    }
+
+}
+
+// Funcion para ordenar tareas por fecha limite con bubblesort
+function ordenarTareasPorFechaLimite() {
+    let total = tareas.length;
+
+    for (let j = 0; j < total; j++) {
+        for (let i = 0; i < total - 1; i++) {
+            if (tareas[i].fechaLimite > tareas[i + 1].fechaLimite) {
+
+                let temp = tareas[i];
+                tareas[i] = tareas[i + 1];
+                tareas[i + 1] = temp;
+
+            }
+        }
+    }
+
+}
+
+// Funcion que busca una tarea por nombre y retorna su posicion
+function buscarTareaPorNombre(nombreTarea) {
+
+    let inicio = 0;
+    let fin = tareas.length - 1;
+
+    while (inicio <= fin) {
+        let posicionElementoMedio = Math.round((inicio + fin) / 2);
+
+        if (tareas[posicionElementoMedio].nombre === nombreTarea) {
+            return posicionElementoMedio;
+        } else if (tareas[posicionElementoMedio].nombre < nombreTarea) {
+            inicio = posicionElementoMedio + 1;
+        } else {
+            fin = posicionElementoMedio - 1;
+        }
+    }
+
+    return -1;
+}
 
 // Funcion Menu de Opciones
 function mostrarMenu() {
@@ -133,6 +189,9 @@ function mostrarMenu() {
     console.log("8. Filtrar Tareas por Categoria");
     console.log("9. Tareas Completadas por Categoria");
     console.log("10. Tareas Pendientes");
+    console.log("11. Ordenar Tareas Algabeticamente")
+    console.log("12. Ordenar Por Fecha Limite")
+    console.log("13. Buscar Una Tarea Por Nombre")
     console.log("0. Salir");
 }
 
@@ -155,7 +214,7 @@ function interactuarUsuario() {
                 break;
 
             case 2:
-                let indiceEliminar = promt("Ingrese el Indice de la Tarea a Eliminar: ");
+                let indiceEliminar = parseInt("Ingrese el Indice de la Tarea a Eliminar: ");
                 eliminarTarea(indiceEliminar);
                 break;
 
@@ -232,6 +291,31 @@ function interactuarUsuario() {
 
             case 10:
                 tareasPendientes();
+                break;
+
+            case 11:
+                ordenarTareasPorNombre();
+                console.log("Tareas Por Nombre: ");
+                console.log(tareas);
+                break;
+
+            case 12:
+                ordenarTareasPorFechaLimite();
+                console.log("Tareas Por Fecha Limite: ");
+                console.log(tareas);
+                break;
+
+            case 13:
+                ordenarTareasPorNombre();
+
+                let nombreABuscar = promt("Ingrese Nombre de la Tarea a Buscar: ");
+                let indiceTarea = buscarTareaPorNombre(nombreABuscar);
+
+                if (indiceTarea !== -1) {
+                    console.log("Tarea encontrada en la posicion: " + indiceTarea);
+                } else {
+                    console.log("Tarea no encontrada o no cargada");
+                }
                 break;
 
             default:
